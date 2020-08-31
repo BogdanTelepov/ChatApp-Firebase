@@ -1,4 +1,4 @@
-package com.example.chatapp;
+package com.example.chatapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -8,15 +8,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.chatapp.adapters.ContactsAdapter;
+import com.example.chatapp.R;
+import com.example.chatapp.models.User;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity {
+
+
     private RecyclerView recyclerView;
     private ContactsAdapter adapter;
     private List<User> list = new ArrayList<>();

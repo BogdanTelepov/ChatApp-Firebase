@@ -1,21 +1,22 @@
-package com.example.chatapp;
+package com.example.chatapp.activities;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.chatapp.adapters.MessageAdapter;
+import com.example.chatapp.R;
+import com.example.chatapp.models.Chat;
+import com.example.chatapp.models.Message;
+import com.example.chatapp.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -28,12 +29,14 @@ import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity {
     private User user;
+    private Chat chat;
     RecyclerView recyclerView;
     MessageAdapter adapter;
     List<Message> messageList = new ArrayList<>();
+
     EditText editTextEnterMessage;
     ImageView imageViewSend;
-    private Chat chat;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class ChatActivity extends AppCompatActivity {
             userIds.add(user.getId());
             userIds.add(FirebaseAuth.getInstance().getUid());
             chat.setUserIds(userIds);
-        }else {
+        } else {
             initList();
             getMessages();
         }
@@ -60,27 +63,21 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseFirestore.getInstance().collection("chats")
                 .document(chat.getId())
                 .collection("messages")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException error) {
-                        for (DocumentChange change : snapshots.getDocumentChanges()) {
-                            switch (change.getType()) {
-                                case ADDED:
-                                    messageList.add(change.getDocument().toObject(Message.class));
-                                    break;
-
-                                case MODIFIED:
-
-                                    break;
-
-                                case REMOVED:
-
-                                    break;
-                            }
+                .addSnapshotListener((snapshots, e) -> {
+                    for (DocumentChange change : snapshots.getDocumentChanges()) {
+                        switch (change.getType()) {
+                            case ADDED:
+                                messageList.add(change.getDocument().toObject(Message.class));
+                                break;
+                            case REMOVED:
+                                break;
+                            case MODIFIED:
+                                break;
                         }
-                        adapter.notifyDataSetChanged();
                     }
+                    adapter.notifyDataSetChanged();
                 });
+
     }
 
 
@@ -97,6 +94,7 @@ public class ChatActivity extends AppCompatActivity {
         String text = editTextEnterMessage.getText().toString().trim();
         if (chat.getId() != null) {
             sendMessage(text);
+            editTextEnterMessage.setText("");
         } else {
             createChat(text);
         }

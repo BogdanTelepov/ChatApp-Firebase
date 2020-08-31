@@ -1,4 +1,4 @@
-package com.example.chatapp;
+package com.example.chatapp.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,15 +9,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.chatapp.R;
+import com.example.chatapp.interfaces.OnItemClickListener;
+import com.example.chatapp.models.User;
+
 import java.util.List;
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
-    private List<Message> messageList;
+public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
+
+    private List<User> users;
     private LayoutInflater inflater;
     public static OnItemClickListener onItemClickListener;
 
-    public MessageAdapter(Context context, List<Message> messageList) {
-        this.messageList = messageList;
+    public ContactsAdapter(Context context, List<User> users) {
+        this.users = users;
         inflater = LayoutInflater.from(context);
     }
 
@@ -30,16 +35,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(messageList.get(position));
+        holder.bind(users.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return messageList.size();
+        return users.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        MessageAdapter.onItemClickListener = onItemClickListener;
+        ContactsAdapter.onItemClickListener = onItemClickListener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -51,8 +56,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             txtUserName = itemView.findViewById(R.id.txtUserName);
         }
 
-        public void bind(Message message) {
-            txtUserName.setText(message.getText());
+        public void bind(User user) {
+            txtUserName.setText(user.getName());
 
         }
     }

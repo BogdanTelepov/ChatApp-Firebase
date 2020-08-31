@@ -1,4 +1,4 @@
-package com.example.chatapp;
+package com.example.chatapp.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.chatapp.R;
+import com.example.chatapp.interfaces.OnItemClickListener;
+import com.example.chatapp.models.Chat;
 
 import java.util.List;
 
