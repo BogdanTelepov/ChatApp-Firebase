@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#00BCD4"
     tools:context=".activities.PhoneActivity">
 
     <EditText
         android:id="@+id/editTxt_phoneNumber"
+        android:textColorHint="@android:color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -17,7 +19,7 @@
         android:textSize="15sp" />
 
     <Button
-        android:onClick="onClickStart"
+        android:background="#2196F3"
         android:id="@+id/btn_signIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,6 +27,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_margin="10dp"
+        android:onClick="onClickStart"
         android:text="Sign in"
         android:textSize="20sp" />
 

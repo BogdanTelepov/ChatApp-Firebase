@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#00BCD4"
     android:orientation="vertical"
     tools:context=".activities.ProfileActivity">
 
     <EditText
+        android:textColorHint="@android:color/black"
         android:inputType="textCapWords"
         android:id="@+id/editTxt_name"
         android:layout_width="match_parent"
@@ -17,6 +19,7 @@
         android:hint="Enter your name" />
 
     <Button
+        android:background="#2196F3"
         android:onClick="onClickSave"
         android:id="@+id/btn_saveName"
         android:layout_width="wrap_content"
