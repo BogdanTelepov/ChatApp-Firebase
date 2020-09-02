@@ -10,7 +10,7 @@ public class Message {
     private String senderId;
     @ServerTimestamp
     private Timestamp timestamp;
-    private boolean isRead;
+
 
 
     public String getId() {
@@ -33,18 +33,12 @@ public class Message {
         this.timestamp = timestamp;
     }
 
-    public void setRead(boolean read) {
-        isRead = read;
-    }
 
     public Timestamp getTime() {
         return timestamp;
     }
 
 
-    public boolean isRead() {
-        return isRead;
-    }
 
     public String getText() {
         return text;
