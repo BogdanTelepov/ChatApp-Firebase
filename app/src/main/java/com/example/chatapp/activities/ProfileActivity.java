@@ -1,13 +1,12 @@
 package com.example.chatapp.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chatapp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,30 +16,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
-    private EditText editTextName;
-    private Button btnSaveName;
+
+    private EditText nameEditText;
+    private String phoneNumber;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        editTextName = findViewById(R.id.editTxt_name);
-        btnSaveName = findViewById(R.id.btn_saveName);
+        nameEditText = findViewById(R.id.nameEditText);
+        phoneNumber = getIntent().getStringExtra("number");
     }
 
-    public void onClickSave(View view) {
-        String name = editTextName.getText().toString().trim();
-        if (TextUtils.isEmpty(name)) {
-            editTextName.setError("Input name");
+    public void onSaveName(View view) {
+        String name = nameEditText.getText().toString();
+        if (name.trim().isEmpty()) {
+            nameEditText.setText("User name");
             return;
         }
 
-        // здесь нужно создать модель Юзера (имя ....)
-
 
         Map<String, Object> map = new HashMap<>();
-        map.put("name", name);
+        map.put("displayName", name);
+        map.put("phoneNumber", phoneNumber);
+
+
         String userId = FirebaseAuth.getInstance().getUid();
         FirebaseFirestore.getInstance().collection("users")
                 .document(userId)
@@ -49,8 +50,12 @@ public class ProfileActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         startActivity(new Intent(ProfileActivity.this, MainActivity.class));
                         finish();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Not successful", Toast.LENGTH_SHORT)
+                                .show();
                     }
                 });
-
     }
+
+
 }

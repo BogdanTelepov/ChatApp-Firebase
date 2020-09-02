@@ -17,47 +17,53 @@ import java.util.List;
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
 
-    private List<User> users;
-    private LayoutInflater inflater;
-    public static OnItemClickListener onItemClickListener;
 
-    public ContactsAdapter(Context context, List<User> users) {
-        this.users = users;
-        inflater = LayoutInflater.from(context);
+    LayoutInflater inflater;
+    List<User> userList;
+    OnItemClickListener onItemClick;
+
+    public ContactsAdapter(Context context, List<User> userList) {
+        this.inflater = LayoutInflater.from(context);
+        this.userList = userList;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_user, parent, false);
+
+        View view = inflater.inflate(R.layout.contacts_list, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(users.get(position));
+        holder.bind(userList.get(position));
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClicklistener) {
+        this.onItemClick = onItemClicklistener;
     }
 
     @Override
     public int getItemCount() {
-        return users.size();
+        return userList.size();
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        ContactsAdapter.onItemClickListener = onItemClickListener;
-    }
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView name;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtUserName;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            itemView.setOnClickListener(v -> onItemClickListener.onItemClick(getAdapterPosition()));
-            txtUserName = itemView.findViewById(R.id.txtUserName);
+            itemView.setOnClickListener(v -> onItemClick.onItemClick(getAdapterPosition()));
+            name = itemView.findViewById(R.id.contact_name);
+
         }
 
+
         public void bind(User user) {
-            txtUserName.setText(user.getName());
+            name.setText(user.getDisplayName());
+
 
         }
     }

@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00BCD4"
     android:orientation="vertical"
     tools:context=".activities.ProfileActivity">
 
+
+
     <EditText
-        android:textColorHint="@android:color/black"
-        android:inputType="textCapWords"
-        android:id="@+id/editTxt_name"
+        android:id="@+id/nameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_margin="10dp"
-        android:hint="Enter your name" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="15dp"
+        android:hint="Enter user name"
+        android:inputType="textCapWords" />
+
 
     <Button
-        android:background="#2196F3"
-        android:onClick="onClickSave"
-        android:id="@+id/btn_saveName"
-        android:layout_width="wrap_content"
+        android:id="@+id/saveBtn"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editTxt_name"
-        android:layout_centerInParent="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="15dp"
+        android:onClick="onSaveName"
+        android:background="@color/grey"
+        android:textColor="@android:color/white"
         android:text="Save" />
-
-
-</RelativeLayout>
+</LinearLayout>

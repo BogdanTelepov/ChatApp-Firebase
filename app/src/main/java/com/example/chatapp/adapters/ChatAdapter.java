@@ -16,47 +16,54 @@ import com.example.chatapp.models.Chat;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
-    private List<Chat> chats;
-    private LayoutInflater inflater;
-    public static OnItemClickListener onItemClickListener;
+    LayoutInflater inflater;
+    List<Chat> chatList;
+    OnItemClickListener onItemClick;
 
-    public ChatAdapter(Context context, List<Chat> chats) {
-        this.chats = chats;
-        inflater = LayoutInflater.from(context);
+    public ChatAdapter(Context context, List<Chat> chatList) {
+        this.inflater = LayoutInflater.from(context);
+        this.chatList = chatList;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_user, parent, false);
+
+        View view = inflater.inflate(R.layout.contacts_list, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(chats.get(position));
+        holder.bind(chatList.get(position));
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClicklistener) {
+        this.onItemClick = onItemClicklistener;
     }
 
     @Override
     public int getItemCount() {
-        return chats.size();
+        return chatList.size();
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView name;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtUserName;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            itemView.setOnClickListener(v -> onItemClickListener.onItemClick(getAdapterPosition()));
-            txtUserName = itemView.findViewById(R.id.txtUserName);
+            itemView.setOnClickListener(v -> onItemClick.onItemClick(getAdapterPosition()));
+            name = itemView.findViewById(R.id.contact_name);
+
+
         }
 
-        public void bind(Chat chat) {
-            txtUserName.setText(chat.getId());
+
+        public void bind(final Chat chat) {
+            name.setText(chat.getId());
+
 
         }
     }

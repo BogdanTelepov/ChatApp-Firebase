@@ -1,30 +1,61 @@
 package com.example.chatapp.models;
 
-import java.io.Serializable;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.ServerTimestamp;
 
-public class Message implements Serializable {
+public class Message {
+    private String id;
+    private String displayName;
     private String text;
     private String senderId;
-    private long time;
+    @ServerTimestamp
+    private Timestamp timestamp;
+    private boolean isRead;
 
-    public long getTime() {
-        return time;
+
+    public String getId() {
+        return id;
     }
 
-    public void setTime(long time) {
-        this.time = time;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public void setTime(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
+    }
+
+    public Timestamp getTime() {
+        return timestamp;
+    }
+
+
+    public boolean isRead() {
+        return isRead;
     }
 
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public String getSenderId() {
         return senderId;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public void setSenderId(String senderId) {

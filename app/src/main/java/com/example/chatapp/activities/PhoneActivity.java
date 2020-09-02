@@ -1,13 +1,13 @@
 package com.example.chatapp.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chatapp.R;
 import com.google.firebase.FirebaseException;
@@ -18,46 +18,67 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import java.util.concurrent.TimeUnit;
 
 public class PhoneActivity extends AppCompatActivity {
-    private EditText editTextPhone;
-    private Button buttonSignIn;
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks;
+
+    private EditText phoneNumberEditText;
+    private Button register;
+    private String phoneNumber;
+
+    PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks;
+    private String verificationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone);
-        editTextPhone = findViewById(R.id.editTxt_phoneNumber);
-        buttonSignIn = findViewById(R.id.btn_signIn);
+        phoneNumberEditText = findViewById(R.id.inputPhoneEditTxt);
+        register = findViewById(R.id.signIn);
         callbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
-            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+            public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
                 signIn(phoneAuthCredential);
             }
 
             @Override
-            public void onVerificationFailed(FirebaseException e) {
+            public void onVerificationFailed(@NonNull FirebaseException e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            }
 
+            @Override
+            public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                super.onCodeSent(s, forceResendingToken);
+                verificationId = s;
             }
         };
+        register.setOnClickListener(v -> {
+            onSendCode();
+
+        });
     }
 
     private void signIn(PhoneAuthCredential phoneAuthCredential) {
-        FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        startActivity(new Intent(PhoneActivity.this, ProfileActivity.class));
-                        finish();
-                    } else {
-                        Toast.makeText(PhoneActivity.this, "Error authorisation", Toast.LENGTH_LONG)
-                                .show();
-                    }
-                });
+        FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Intent intent = new Intent(PhoneActivity.this, ProfileActivity.class);
+                intent.putExtra("number", phoneNumber);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "Authentication failed!" + task.getException().getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
+    public void onSendCode() {
+        phoneNumber = phoneNumberEditText.getText().toString().trim();
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber,
+                60, TimeUnit.SECONDS, this, callbacks);
+    }
 
-    public void onClickStart(View view) {
-        String phone = editTextPhone.getText().toString().trim();
-        PhoneAuthProvider.getInstance()
-                .verifyPhoneNumber(phone, 60, TimeUnit.SECONDS, this, callbacks);
+    public void onCheckCode() {
+        String code = phoneNumberEditText.getText().toString().trim();
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
+        signIn(credential);
     }
 }
